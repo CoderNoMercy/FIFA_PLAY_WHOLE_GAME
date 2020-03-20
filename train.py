@@ -50,6 +50,8 @@ def train(game, model, target_net, epochs, verbose=1):
         else:
             paused = False
         counting = 0
+        win_cnt = 0
+        total_count = 0
         while not game_over:
             if not paused:
                 # The learner is acting on the last observed game screen
@@ -80,6 +82,7 @@ def train(game, model, target_net, epochs, verbose=1):
                 counting += 1
                 # apply action, get rewards and new state
                 input_t, reward = game.act(action)
+                total_count += 1
                 # If we managed to catch the fruit we add 1 to our win counter
                 if reward > 0:
                     win_cnt += 1
@@ -131,6 +134,7 @@ def train(game, model, target_net, epochs, verbose=1):
                 target_net.load_state_dict(model.state_dict())
         if verbose > 0:
             print("Epoch {:03d}/{:03d} | Loss {:.4f} | Win count {}".format(e, epochs, loss_total, win_cnt))
-        save_model(model,e)
-        win_hist.append(win_cnt)
+        if e%500==0:
+            save_model(model,e)
+        win_hist.append(win_cnt/total_count)
     return win_hist

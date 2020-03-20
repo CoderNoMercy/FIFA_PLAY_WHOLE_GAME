@@ -10,7 +10,7 @@ import numpy as np
 import pytesseract as pt
 from PIL import Image
 
-# SendInput = ctypes.windll.user32.SendInput
+SendInput = ctypes.windll.user32.SendInput
 
 W = 0x11
 Q = 0x10

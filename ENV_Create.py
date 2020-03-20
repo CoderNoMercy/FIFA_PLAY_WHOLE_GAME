@@ -40,6 +40,20 @@ class FIFA(object):
 
     def observe(self):
         print('\n\nobserve')
+        restart_button = grab_screen((552, 815, 200, 100))
+        buttom_image = Image.fromarray(restart_button.astype('uint8'), 'RGB')
+        restart_text = pt.image_to_string(buttom_image)
+        if "RETRY DRILL" in restart_text:
+            # press enter key
+            print('pressing enter, reset reward')
+            self.reward = 0
+            PressKey(leftarrow)
+            time.sleep(0.4)
+            ReleaseKey(leftarrow)
+            PressKey(enter)
+            time.sleep(0.4)
+            ReleaseKey(enter)
+            time.sleep(2)
         # get current state s from screen using screen-grab
         screen = grab_screen(region=(460, 0, 1080, 1080))
         # process through FeatureMap to get the feature map from the raw image
@@ -72,7 +86,7 @@ class FIFA(object):
                 PressKey(Q)
                 time.sleep(0.2)
                 ReleaseKey(Q)
-            if action in [12, 13, 14, 15]: # transient a ball to other player or shot the ball, then we choose to move a distance and transmit the ball again
+            if action in [12, 13, 14,15]:  # transient a ball to other player or shot the ball, then we choose to move a distance and transmit the ball again
                 PressKey(key)
                 sub_action = np.random.choice(move)
                 if sub_action in move:
@@ -95,8 +109,7 @@ class FIFA(object):
         return self.observe(), reward
 
     def reset(self):
-        self.reward = 0
-        return 0
+         return 0
 
     def remember(self, states):
         # Save a state to memory
